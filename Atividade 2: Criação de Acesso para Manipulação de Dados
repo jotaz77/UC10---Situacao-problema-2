@@ -1,0 +1,155 @@
+// ===============================================
+// ConnectionFactory.java
+// ===============================================
+package com.comabem.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ConnectionFactory {
+
+    private static final String URL = "jdbc:mysql://localhost:3306/ComaBem";
+    private static final String USER = "admin_comabem";
+    private static final String PASSWORD = "admin123";
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao conectar ao banco: " + e.getMessage());
+        }
+    }
+}
+
+// ===============================================
+// Produto.java (MODEL)
+// ===============================================
+package com.comabem.model;
+
+public class Produto {
+
+    private int id;
+    private String nome;
+    private double preco;
+    private double quantidade;
+    private String unidadeMedida;
+
+    public Produto() {}
+
+    public Produto(String nome, double preco, double quantidade, String unidadeMedida) {
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.unidadeMedida = unidadeMedida;
+    }
+
+    // Getters e Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public double getPreco() { return preco; }
+    public void setPreco(double preco) { this.preco = preco; }
+
+    public double getQuantidade() { return quantidade; }
+    public void setQuantidade(double quantidade) { this.quantidade = quantidade; }
+
+    public String getUnidadeMedida() { return unidadeMedida; }
+    public void setUnidadeMedida(String unidadeMedida) { this.unidadeMedida = unidadeMedida; }
+}
+
+// ===============================================
+// ProdutoDAO.java (CRUD)
+// ===============================================
+package com.comabem.dao;
+
+import com.comabem.model.Produto;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProdutoDAO {
+
+    // CREATE - Inserir produto
+    public void inserir(Produto produto) {
+        String sql = "INSERT INTO Produto (nome, preco, quantidade, unidade_medida) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, produto.getNome());
+            stmt.setDouble(2, produto.getPreco());
+            stmt.setDouble(3, produto.getQuantidade());
+            stmt.setString(4, produto.getUnidadeMedida());
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao inserir produto: " + e.getMessage());
+        }
+    }
+
+    // READ - Listar produtos
+    public List<Produto> listar() {
+        List<Produto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Produto";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Produto p = new Produto();
+                p.setId(rs.getInt("id_produto"));
+                p.setNome(rs.getString("nome"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setQuantidade(rs.getDouble("quantidade"));
+                p.setUnidadeMedida(rs.getString("unidade_medida"));
+                lista.add(p);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao listar produtos: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    // UPDATE - Atualizar produto
+    public void atualizar(Produto produto) {
+        String sql = "UPDATE Produto SET nome=?, preco=?, quantidade=?, unidade_medida=? WHERE id_produto=?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, produto.getNome());
+            stmt.setDouble(2, produto.getPreco());
+            stmt.setDouble(3, produto.getQuantidade());
+            stmt.setString(4, produto.getUnidadeMedida());
+            stmt.setInt(5, produto.getId());
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao atualizar produto: " + e.getMessage());
+        }
+    }
+
+    // DELETE - Excluir produto
+    public void deletar(int id) {
+        String sql = "DELETE FROM Produto WHERE id_produto=?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao excluir produto: " + e.getMessage());
+        }
+    }
+}
