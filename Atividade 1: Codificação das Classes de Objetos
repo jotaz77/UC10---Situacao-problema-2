@@ -1,1 +1,70 @@
+public class Produto {
 
+    private int id_produto;
+    private String nome;
+    private double preco;
+    private double quantidade;
+    private String unidade_medida;
+
+    public Produto() {
+    }
+
+    public Produto(int id_produto, String nome, double preco, double quantidade, String unidade_medida) {
+        this.id_produto = id_produto;
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.unidade_medida = unidade_medida;
+    }
+
+    public int getId_produto() {
+        return id_produto;
+    }
+
+    public void setId_produto(int id_produto) {
+        this.id_produto = id_produto;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public double getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(double quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public String getUnidade_medida() {
+        return unidade_medida;
+    }
+
+    public void setUnidade_medida(String unidade_medida) {
+        this.unidade_medida = unidade_medida;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id_produto=" + id_produto +
+                ", nome='" + nome + '\'' +
+                ", preco=" + preco +
+                ", quantidade=" + quantidade +
+                ", unidade_medida='" + unidade_medida + '\'' +
+                '}';
+    }
+}
