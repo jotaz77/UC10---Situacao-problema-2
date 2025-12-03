@@ -1,6 +1,6 @@
-// ===============================================
+
 // ConnectionFactory.java
-// ===============================================
+
 package com.comabem.dao;
 
 import java.sql.Connection;
@@ -21,9 +21,9 @@ public class ConnectionFactory {
     }
 }
 
-// ===============================================
+
 // Produto.java (MODEL)
-// ===============================================
+
 package com.comabem.model;
 
 public class Produto {
@@ -60,9 +60,9 @@ public class Produto {
     public void setUnidadeMedida(String unidadeMedida) { this.unidadeMedida = unidadeMedida; }
 }
 
-// ===============================================
+
 // ProdutoDAO.java (CRUD)
-// ===============================================
+
 package com.comabem.dao;
 
 import com.comabem.model.Produto;
